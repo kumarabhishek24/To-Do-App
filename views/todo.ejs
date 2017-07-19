@@ -3,20 +3,24 @@
   <title>To-Do List</title>
   <link href='../assets/style.css' rel="stylesheet" type="text/css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="../assets/todo.js" text="text/javascript"></script>
 </head>
 
 <body>
+  <h1>My To-do List</h1>
   <div id="todo-table">
     <form>
       <input type="text" name="item" placeholder="Add new Item.." required>
       <button type="submit"> Add Item </button>
     </form>
+    <ul>
+      <% for(var i =0 ; i < todos.length ; i ++){ %>
+        <li> <%= todos[i].item %> </li>
+      <% } %>
+    </ul>
   </div>
 
-  <ul>
-    <li>Item 1 </li>
-    <li>Item 2 </li>
-  </ul>
+
 </body>
 
 </html>
