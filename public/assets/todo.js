@@ -9,12 +9,31 @@ $(document).ready(function(){
         url: '/todo',
         data: todo,
         success: function(data){
-          location.reload();
+
+
         },
           error: function(){
             alert('Server Down');
           }
       });
-  });
+
+    });
+
+    $('li').on('click',function(){
+      var item = $(this).text().replace(/ /g,'-');
+
+      $.ajax({
+        type: 'DELETE',
+        url : '/todo/' + item,
+        success: function(data){
+          //reload webpage
+          location.reload();
+        },
+          error: function(){
+            alert('Server hhhDown');
+          }
+      });
+    });
+
 
 });
