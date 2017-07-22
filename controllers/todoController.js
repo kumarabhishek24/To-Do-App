@@ -1,8 +1,16 @@
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 
+mongoose.Promise = global.Promise;
 //connect to database
-mongoose.connect('mongodb://jeetesh:jeetesh@ds133311.mlab.com:33311/todo');
+mongoose.connect('mongodb://jeetesh:jeetesh@ds133311.mlab.com:33311/todo',{useMongoClient : true});
+
+//check the connection
+mongoose.connection.once('open',function(){
+  console.log('connection has been made');
+}).on('error',function(error){
+  console.log('connection has error :' + error);
+});
 
 //create schema
 var todoSchema = new mongoose.Schema({
@@ -11,34 +19,40 @@ var todoSchema = new mongoose.Schema({
 
 var Todo = mongoose.model('Todo',todoSchema);
 
-var itemOne = Todo({item : 'Play ps4'}).save().then(function(){
-  console.log('Item saved');
-});
 
 
-var data = [{item : 'get milk'}, {item : 'walk dog'} , {item : 'coding'}];
+//var data = [{item : 'get milk'}, {item : 'walk dog'} , {item : 'coding'}];
 
 var urlencodedParser = bodyParser.urlencoded({extended: false});
 
 module.exports = function(app){
 
 app.get('/todo',function(req,res){
- res.render('todo' , {todos : data });
+  //get data from mongodb
+  Todo.find({}).then(function(data){
+
+    res.render('todo' , {todos : data });
+  })
+
+
 });
 
 app.post('/todo', urlencodedParser ,function(req,res){
-    data.push(req.body);
-    res.json(data);
+
+  //get the data from veiw and push it in mongodb
+
+    var newTodo = Todo(req.body).save().then(function(data){
+      res.json(data);
+    });
+
 });
 
 app.delete('/todo/:item',function(req,res){
-
-  data = data.filter(function(todo){
-
-    return (todo.item.replace(/ /g,'-') !== req.params.item);
+  //delete the data requested
+  Todo.findOneAndRemove({item : req.params.item.replace(/\-/g,' ')}).then(function(data){
+    res.json(data);
   });
 
-  res.json(data);
 });
 
 };
