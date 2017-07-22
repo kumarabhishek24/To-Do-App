@@ -1,4 +1,20 @@
 var bodyParser = require('body-parser');
+var mongoose = require('mongoose');
+
+//connect to database
+mongoose.connect('mongodb://jeetesh:jeetesh@ds133311.mlab.com:33311/todo');
+
+//create schema
+var todoSchema = new mongoose.Schema({
+  item : String
+});
+
+var Todo = mongoose.model('Todo',todoSchema);
+
+var itemOne = Todo({item : 'Play ps4'}).save().then(function(){
+  console.log('Item saved');
+});
+
 
 var data = [{item : 'get milk'}, {item : 'walk dog'} , {item : 'coding'}];
 
