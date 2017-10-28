@@ -5,6 +5,6 @@ Instructions for use
 
 Install all the dependencies by: npm install
 
-Type the Url : => localhost:3000/todo
+Type the Url : => localhost:3000/todo 
 
 You are good to Go..Your aal data is saved on mlab cloud Database.
